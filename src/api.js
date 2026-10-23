@@ -1,4 +1,5 @@
-export const API = `http://${window.location.hostname}:5000`
+export const API =
+  import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000`
 
 export const getToken = () => localStorage.getItem('token')
 

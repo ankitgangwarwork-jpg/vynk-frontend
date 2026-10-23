@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./OTPVerification.css";
+import "./OTPverification.css";
 import { api } from "../api";
 
 function OTPVerification({ email, onVerify }) {

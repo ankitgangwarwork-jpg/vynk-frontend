@@ -13,6 +13,7 @@ import { api, fileUrl } from "../api";
 import { connectSocket } from "../socket";
 import useCall from "../useCall";
 import CallScreen from "../CallScreen";
+import PhoneSettings from "./PhoneSetting";
 import "./Chat.css";
 
 function Chat({ user, onLogout }) {
@@ -518,6 +519,9 @@ function Chat({ user, onLogout }) {
                             >
                                 Save Changes
                             </button>
+
+                            {/* Phone Settings */}
+                            <PhoneSettings />
 
                             {/* Logout */}
                             <button

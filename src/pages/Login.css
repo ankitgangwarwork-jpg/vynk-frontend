@@ -119,3 +119,45 @@
 .register-link:hover {
   text-decoration: underline;
 }
+
+/* Forgot password + OTP login */
+
+.forgot-link {
+  align-self: flex-end;
+
+  margin: -8px 0 18px;
+  padding: 0;
+
+  border: none;
+  background: none;
+
+  color: #4f46e5;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.mode-switch {
+  margin-top: 14px;
+  padding: 12px;
+
+  border: 1px solid #c7d2fe;
+  border-radius: 10px;
+
+  background: #eef2ff;
+  color: #4f46e5;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.mode-switch:hover {
+  background: #e0e7ff;
+}

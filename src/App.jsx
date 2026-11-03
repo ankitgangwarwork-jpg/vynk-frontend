@@ -3,6 +3,7 @@ import { useState } from "react";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import OTPVerification from "./pages/OTPverification";
+import ForgotPassword from "./pages/ForgotPassword";
 import Chat from "./pages/Chat";
 import { disconnectSocket } from "./socket";
 
@@ -19,8 +20,8 @@ const getSavedUser = () => {
 };
 
 function App() {
-  const [page, setPage] = useState("login"); // login | register | otp
-  const [email, setEmail] = useState("");
+  const [page, setPage] = useState("login"); // login | register | otp | forgot
+  const [email, setEmail] = useState(""); // OTP page ke liye email ya phone
   const [user, setUser] = useState(getSavedUser);
 
   const handleLogout = () => {
@@ -41,6 +42,11 @@ function App() {
     return <OTPVerification email={email} onVerify={(u) => setUser(u)} />;
   }
 
+  // Forgot password page
+  if (page === "forgot") {
+    return <ForgotPassword onBack={() => setPage("login")} />;
+  }
+
   // Register page
   if (page === "register") {
     return (
@@ -57,11 +63,14 @@ function App() {
   // Login page
   return (
     <Login
+      onSuccess={(u) => setUser(u)} // email/phone + password se seedha login
       onLogin={(e) => {
+        // OTP wala login
         setEmail(e);
         setPage("otp");
       }}
       onRegister={() => setPage("register")}
+      onForgot={() => setPage("forgot")}
     />
   );
 }

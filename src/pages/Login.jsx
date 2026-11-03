@@ -2,21 +2,40 @@ import { useState } from "react";
 import { api } from "../api";
 import "./Login.css";
 
-function Login({ onLogin, onRegister }) {
-  const [email, setEmail] = useState("");
+function Login({ onSuccess, onLogin, onRegister, onForgot }) {
+  const [identifier, setIdentifier] = useState(""); // email ya phone
   const [password, setPassword] = useState("");
+  const [useOtp, setUseOtp] = useState(false); // true = OTP se login
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
+    const id = identifier.trim();
+
+    if (!id || (!useOtp && !password)) {
       alert("Please fill all fields");
       return;
     }
 
     try {
-      await api.login(email, password); // backend OTP bhejta hai
-      onLogin(email);
+      if (useOtp) {
+        await api.otpLogin(id); // email / SMS par OTP jaata hai
+        onLogin(id);
+        return;
+      }
+
+      const data = await api.login(id, password);
+
+      // Email abhi verify nahi hui -> OTP page
+      if (data.otpRequired) {
+        onLogin(data.email);
+        return;
+      }
+
+      // Seedha login (OTP nahi)
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      onSuccess(data.user);
     } catch (err) {
       alert(err.message);
     }
@@ -30,24 +49,44 @@ function Login({ onLogin, onRegister }) {
         <p className="login-subtitle">Login to ChatApp</p>
 
         <form onSubmit={handleLogin}>
-          <label>Email</label>
+          <label>Email or Phone Number</label>
           <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Enter email or phone number"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
           />
 
-          <label>Password</label>
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          {!useOtp && (
+            <>
+              <label>Password</label>
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <button
+                type="button"
+                className="forgot-link"
+                onClick={onForgot}
+              >
+                Forgot password?
+              </button>
+            </>
+          )}
 
           <button type="submit" className="login-button">
-            Login
+            {useOtp ? "Send OTP" : "Login"}
+          </button>
+
+          <button
+            type="button"
+            className="mode-switch"
+            onClick={() => setUseOtp(!useOtp)}
+          >
+            {useOtp ? "Login with password" : "Login with OTP"}
           </button>
         </form>
 

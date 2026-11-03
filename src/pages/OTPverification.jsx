@@ -39,7 +39,7 @@ function OTPVerification({ email, onVerify }) {
         <h1>Verify OTP</h1>
 
         <p className="otp-subtitle">
-          Enter the 6-digit OTP sent to your email
+          Enter the 6-digit OTP sent to your email / phone number: <strong>{email}</strong>
         </p>
 
         <form onSubmit={handleVerify}>
